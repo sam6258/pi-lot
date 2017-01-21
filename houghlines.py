@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
-import datetime as dt
-n1=dt.datetime.now()
+#import datetime as dt
+#n1=dt.datetime.now()
 for i in range(13, 38):
 
     img = cv2.imread('images/opencv' + str(i) + '.png')
@@ -48,5 +48,11 @@ for i in range(13, 38):
         #print "x1avg: %f y1avg: %f x2avg: %f y2avg: %f slopeavg: %f" % (x1sum / float(numLines), y1sum / float(numLines), x2sum / float(numLines), y2sum / float(numLines), slopeSum / float(numLines))
         #cv2.line(img,(x1avg,y1avg),(x2avg,y2avg),(0,0,255),2)
     #cv2.imwrite('houghlines' + str(i) + '.jpg',img)
-n2=dt.datetime.now()
-print("timing: " + str((n2-n1).microseconds))
+        print(slopeAvg)
+
+        if slopeAvg < -.5:
+            print("swerving right")
+        elif slopeAvg > .5:
+            print("swerving left")
+#n2=dt.datetime.now()
+#print("timing: " + str((n2-n1).microseconds))
