@@ -4,6 +4,16 @@ import cv2
 import threading
 import numpy as np
 import datetime as dt
+import pygame
+
+def leftSwervePlay():
+	pygame.mixer.init()
+	pygame.mixer.music.load("swerve_left.mp3")
+	pygame.mixer.music.play()
+	while pygame.mixer.music.get_busy() == True:
+		continue
+	
+
 def rewrite(arg):
 	n1=dt.datetime.now()
 	filename= arg
@@ -61,7 +71,11 @@ def rewrite(arg):
 	if slopeAvg < -.5:
 	    print("swerving right")
 	elif slopeAvg > .5:
-	    print("swerving left")
+		#Change to thread.
+	    	#leftSwervePlay()
+		t = threading.Timer(0.00001, leftSwervePlay())
+		t.start()
+		print("swerving left")
 	os.chmod(arg, 777)
 
 camera_port=0
