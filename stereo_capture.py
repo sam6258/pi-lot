@@ -21,15 +21,10 @@ while True:
 	ret,image = camera.read()
 	filename = "stereo_left.png"
 	cv2.imwrite(filename, image)
-	t = threading.Timer(0.1, rewrite, [filename])
-	t.start()
 	ret,image = camera.read()
-	counter+=1
     if input_state2 == False:
 	camera=cv2.VideoCapture(camera_port2)
 	ret,image = camera.read()
 	filename = "stereo_right.png"
 	cv2.imwrite(filename, image)
-	t = threading.Timer(0.1, rewrite, [filename])
-	t.start()
 	ret,image = camera.read()
