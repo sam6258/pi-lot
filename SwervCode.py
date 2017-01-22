@@ -5,15 +5,35 @@ import threading
 import numpy as np
 import datetime as dt
 import pygame
-
+playing=False
 def leftSwervePlay():
-	pygame.mixer.init()
-	pygame.mixer.music.load("swerve_left.mp3")
-	pygame.mixer.music.play()
-	while pygame.mixer.music.get_busy() == True:
-		continue
-	
-
+	global playing
+	print("PLaying currently: " + str(playing))
+	if(not playing):
+		pygame.mixer.init()
+		pygame.mixer.music.load("swerve_left.mp3")
+		pygame.mixer.music.play()
+		playing=True
+		print("Starting to play")
+		while pygame.mixer.music.get_busy() == True:
+			x=1
+		print("Done playing")
+		playing=False
+		pygame.mixer.quit()
+	else:
+		print("Exiting")
+		return
+def rightSwervePlay():
+	global playing
+	if(not playing):
+		pygame.mixer.init()
+		pygame.mixer.music.load("swerve_right.mp3")
+		pygame.mixer.music.play()
+		playing=True
+		while pygame.mixer.music.get_busy() == True:
+			continue
+		playing=False	
+		pygame.mixer.quit()
 def rewrite(arg):
 	n1=dt.datetime.now()
 	filename= arg
@@ -68,12 +88,20 @@ def rewrite(arg):
 	cv2.imwrite('houghlines.jpg',img)
 	print(slopeAvg)
 
-	if slopeAvg < -.5:
-	    print("swerving right")
-	elif slopeAvg > .5:
+	if slopeAvg > .15:
+		if(playing):
+			os.chmod(arg, 777)
+			return
+		t = threading.Timer(0.00001, rightSwervePlay)
+		t.start()
+		print("swerving right")
+	elif slopeAvg < -.15:
 		#Change to thread.
 	    	#leftSwervePlay()
-		t = threading.Timer(0.00001, leftSwervePlay())
+		if(playing):
+			os.chmod(arg, 777)
+			return
+		t = threading.Timer(0.00001, leftSwervePlay)
 		t.start()
 		print("swerving left")
 	os.chmod(arg, 777)
@@ -81,8 +109,9 @@ def rewrite(arg):
 camera_port=0
 camera=cv2.VideoCapture(camera_port)
 ret,image = camera.read()
+filename = "opencv.png"
+os.system("sudo rm " + filename)
 while True:
-	filename = "opencv.png"
 	cv2.imwrite(filename, image)
 	os.chmod(filename, 0444)
 	t = threading.Timer(0.1, rewrite, [filename])
