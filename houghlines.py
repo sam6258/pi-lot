@@ -8,6 +8,7 @@ for i in range(26, 27):
     blur = cv2.GaussianBlur(img,(11,11),0)
     cv2.imwrite('blurred' + str(i) + '.jpg', blur);
     gray = cv2.cvtColor(blur,cv2.COLOR_BGR2GRAY)
+    cv2.imwrite('gray' + str(i) + '.jpg', gray);
     edges = cv2.Canny(gray,50,150,apertureSize = 3)
     cv2.imwrite('canny' + str(i) + '.jpg', edges)
     ret,thresh = cv2.threshold(edges, 127, 255, cv2.THRESH_TRUNC)
