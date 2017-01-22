@@ -6,6 +6,7 @@ import threading
 import numpy as np
 import datetime as dt
 import pygame
+import matlab.engine
 
 GPIO.setmode(GPIO.BCM)
 
@@ -21,10 +22,12 @@ while True:
 	ret,image = camera.read()
 	filename = "stereo_left.png"
 	cv2.imwrite(filename, image)
-	ret,image = camera.read()
+	eng = matlab.engine.start_matlab()
+	eng.coleDisparity(nargout=0)
     if input_state2 == False:
 	camera=cv2.VideoCapture(camera_port2)
 	ret,image = camera.read()
 	filename = "stereo_right.png"
 	cv2.imwrite(filename, image)
-	ret,image = camera.read()
+	eng = matlab.engine.start_matlab()
+	eng.coleDisparity(nargout=0)
