@@ -2,16 +2,17 @@ import cv2
 import numpy as np
 #import datetime as dt
 #n1=dt.datetime.now()
-for i in range(13, 38):
+for i in range(26, 27):
 
     img = cv2.imread('images/opencv' + str(i) + '.png')
     blur = cv2.GaussianBlur(img,(11,11),0)
-    #cv2.imwrite('blurred' + str(i) + '.jpg', blur);
+    cv2.imwrite('blurred' + str(i) + '.jpg', blur);
     gray = cv2.cvtColor(blur,cv2.COLOR_BGR2GRAY)
+    cv2.imwrite('gray' + str(i) + '.jpg', gray);
     edges = cv2.Canny(gray,50,150,apertureSize = 3)
-    #cv2.imwrite('canny' + str(i) + '.jpg', edges)
+    cv2.imwrite('canny' + str(i) + '.jpg', edges)
     ret,thresh = cv2.threshold(edges, 127, 255, cv2.THRESH_TRUNC)
-    #cv2.imwrite('thresh' + str(i) + '.jpg', thresh)
+    cv2.imwrite('thresh' + str(i) + '.jpg', thresh)
 
     lines = cv2.HoughLines(thresh,1,np.pi/180,50)
     x1sum = 0
@@ -34,6 +35,7 @@ for i in range(13, 38):
             x2sum += x2
             y1sum += y1
             y2sum += y2
+            #cv2.line(img,(x1,y1),(x2,y2),(0,0,255),2)
             #if x2 != x1:
                 #print "x1: %d y1: %d x2: %d y2: %d slope: %f" % (x1, y1, x2, y2, (y2 - y1) / float(x2 - x1))
             #else:
@@ -46,13 +48,11 @@ for i in range(13, 38):
         y2avg = y2sum / numLines   
         slopeAvg = (y2sum - y1sum) / float(x2sum - x1sum)
         #print "x1avg: %f y1avg: %f x2avg: %f y2avg: %f slopeavg: %f" % (x1sum / float(numLines), y1sum / float(numLines), x2sum / float(numLines), y2sum / float(numLines), slopeSum / float(numLines))
-        #cv2.line(img,(x1avg,y1avg),(x2avg,y2avg),(0,0,255),2)
-    #cv2.imwrite('houghlines' + str(i) + '.jpg',img)
+        cv2.line(img,(x1avg,y1avg),(x2avg,y2avg),(0,0,255),2)
+        cv2.imwrite('houghlinesAverage' + str(i) + '.jpg',img)
         print(slopeAvg)
 
         if slopeAvg < -.5:
             print("swerving right")
         elif slopeAvg > .5:
             print("swerving left")
-#n2=dt.datetime.now()
-#print("timing: " + str((n2-n1).microseconds))
